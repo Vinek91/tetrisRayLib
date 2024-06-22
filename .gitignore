@@ -1,0 +1,24 @@
+# Ignore les fichiers de build générés
+/bin/
+/obj/
+
+# Ignore les fichiers de configuration de l'IDE
+.vscode/
+*.suo
+*.user
+*.sln.docstates
+
+# Ignore les fichiers de logs et les fichiers temporaires
+*.log
+*.vs/
+
+# Ignore les fichiers de dépendances NuGet
+/packages/
+
+# Ignore les fichiers de projet spécifiques à Visual Studio
+*.csproj.user
+*.vcxproj.user
+*.pdb
+
+# Ignore les fichiers de sauvegarde de l'IDE
+*.backup*
