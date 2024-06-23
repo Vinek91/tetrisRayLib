@@ -1,4 +1,5 @@
-﻿namespace Tetris.GlobalSettings
+﻿
+namespace Tetris.src.Tetris
 {
     public static class GlobalSettings
     {
@@ -36,7 +37,7 @@
             }
         }
 
-        public static bool IsPieceOutOfBounds(Piece.Piece piece)
+        public static bool IsPieceOutOfBounds(Piece piece)
         {
             if (piece == null || piece.Shape == null)
             {
@@ -56,7 +57,7 @@
                         int gridY = (piece.Y - PlayAreaY) / cellSize + i;
 
                         // Check if the piece is out of bounds
-                        if (gridX < 0 || gridX >= 10 || gridY >= 20 || (gridY >= 0 && Grid[gridX, gridY] == 1))
+                        if (gridX < 0 || gridX >= 10 || gridY >= 20 || gridY >= 0 && Grid[gridX, gridY] == 1)
                         {
                             return true;
                         }
@@ -67,7 +68,19 @@
             return false;
         }
 
-        public static void PlacePiece(Piece.Piece piece)
+        // Méthode pour effacer la grille
+        public static void ClearGrid()
+        {
+            for (int row = 0; row < Grid.GetLength(0); row++)
+            {
+                for (int col = 0; col < Grid.GetLength(1); col++)
+                {
+                    Grid[row, col] = 0;
+                }
+            }
+        }
+
+        public static void PlacePiece(Piece piece)
         {
             int N = piece.Shape.GetLength(0);
             int cellSize = piece.Size;

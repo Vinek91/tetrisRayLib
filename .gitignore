@@ -1,4 +1,7 @@
 # Ignore les fichiers de build générés
+/Tetris/bin/
+
+# Ignore les fichiers de build générés par .NET
 /bin/
 /obj/
 

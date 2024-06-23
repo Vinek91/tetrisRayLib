@@ -20,4 +20,10 @@ D:\DEV\Games\TetrisNet\Tetris\Tetris\obj\Debug\net8.0\refint\Tetris.dll
 D:\DEV\Games\TetrisNet\Tetris\Tetris\obj\Debug\net8.0\Tetris.pdb
 D:\DEV\Games\TetrisNet\Tetris\Tetris\obj\Debug\net8.0\Tetris.genruntimeconfig.cache
 D:\DEV\Games\TetrisNet\Tetris\Tetris\obj\Debug\net8.0\ref\Tetris.dll
-D:\DEV\Games\TetrisNet\Tetris\Tetris\bin\Debug\net8.0\resources\Tetris.mp3
+D:\DEV\Games\TetrisNet\Tetris\Tetris\obj\Debug\net8.0\Tetris.sourcelink.json
+D:\DEV\Games\TetrisNet\Tetris\Tetris\bin\Debug\net8.0\assets\img\background.png
+D:\DEV\Games\TetrisNet\Tetris\Tetris\bin\Debug\net8.0\assets\sound\fall.mp3
+D:\DEV\Games\TetrisNet\Tetris\Tetris\bin\Debug\net8.0\assets\sound\move.mp3
+D:\DEV\Games\TetrisNet\Tetris\Tetris\bin\Debug\net8.0\assets\sound\oneLine.mp3
+D:\DEV\Games\TetrisNet\Tetris\Tetris\bin\Debug\net8.0\assets\sound\rotate.mp3
+D:\DEV\Games\TetrisNet\Tetris\Tetris\bin\Debug\net8.0\assets\sound\Tetris.mp3

@@ -1,6 +1,6 @@
 ﻿using Raylib_cs;
 
-namespace Tetris.Piece
+namespace Tetris.src.Tetris
 {
     public class Piece
     {
@@ -20,7 +20,7 @@ namespace Tetris.Piece
             Size = size;
             this.playAreaWidth = playAreaWidth;
             this.playAreaHeight = playAreaHeight;
-            X = playAreaWidth / 2 - (Shape.GetLength(1) / 2 * size);
+            X = playAreaWidth / 2 - Shape.GetLength(1) / 2 * size;
             Y = 0;
         }
 
@@ -47,6 +47,34 @@ namespace Tetris.Piece
                 }
             }
         }
+        public void DrawPreview(int posX, int posY)
+        {
+            // Offset for preview display
+            int offsetX = posX;
+            int offsetY = posY;
+
+            // Clone the Shape array to avoid modifying the original Shape of the piece
+            int[,] previewShape = (int[,])Shape.Clone();
+
+            // Loop through the previewShape matrix to draw the preview
+            for (int i = 0; i < previewShape.GetLength(0); i++)
+            {
+                for (int j = 0; j < previewShape.GetLength(1); j++)
+                {
+                    if (previewShape[i, j] == 1)
+                    {
+                        // Calculate the screen position where this cell should be drawn for preview
+                        int screenX = offsetX + j * Size;
+                        int screenY = offsetY + i * Size;
+
+                        // Draw the rectangle and outline for preview
+                        Raylib.DrawRectangle(screenX, screenY, Size, Size, ShapeColor);
+                        Raylib.DrawRectangleLines(screenX, screenY, Size, Size, Color.Black);
+                    }
+                }
+            }
+        }
+
 
 
         public void Rotate()

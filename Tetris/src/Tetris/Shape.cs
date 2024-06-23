@@ -1,4 +1,4 @@
-﻿namespace Tetris.Shape
+﻿namespace Tetris.src.Tetris
 {
     public static class Shapes
     {
@@ -43,5 +43,7 @@
             { 1, 1 },
             { 1, 1 }
         };
+
+
     }
 }
