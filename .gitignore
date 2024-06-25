@@ -25,3 +25,7 @@
 
 # Ignore les fichiers de sauvegarde de l'IDE
 *.backup*
+
+/Tetris/obj/
+
+Tetris/obj/

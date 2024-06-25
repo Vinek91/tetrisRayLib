@@ -5,6 +5,8 @@ namespace Tetris.src.Tetris
     public class Piece
     {
         public int[,] Shape { get; private set; }
+        public Color[,] BlockColors { get; private set; }
+
         public int X { get; set; }
         public int Y { get; set; }
         public int Size { get; set; }
@@ -22,13 +24,31 @@ namespace Tetris.src.Tetris
             this.playAreaHeight = playAreaHeight;
             X = playAreaWidth / 2 - Shape.GetLength(1) / 2 * size;
             Y = 0;
-        }
 
+            // Initialize BlockColors array with the same dimensions as Shape
+            BlockColors = new Color[Shape.GetLength(0), Shape.GetLength(1)];
+            for (int i = 0; i < Shape.GetLength(0); i++)
+            {
+                for (int j = 0; j < Shape.GetLength(1); j++)
+                {
+                    if (Shape[i, j] == 1)
+                    {
+                        BlockColors[i, j] = ShapeColor; // Default to ShapeColor
+                    }
+                }
+            }
+        }
         public void Draw(int offsetX, int offsetY)
         {
             // Calculate the effective X and Y positions within the play area
             int effectiveX = X - 20;
             int effectiveY = Y - 40;
+
+            Color startColor = new Color(
+                Math.Min(ShapeColor.R + 50, 255),
+                Math.Min(ShapeColor.G + 50, 255),
+                Math.Min(ShapeColor.B + 50, 255),
+                ShapeColor.A);
 
             for (int i = 0; i < Shape.GetLength(0); i++)
             {
@@ -40,42 +60,64 @@ namespace Tetris.src.Tetris
                         int screenX = offsetX + (effectiveX / Size + j) * Size;
                         int screenY = offsetY + (effectiveY / Size + i) * Size;
 
+                        // Interpolate the color for the gradient effect
+                        float factor = (float)i / Shape.GetLength(0);
+                        Color interpolatedColor = InterpolateColor(startColor, ShapeColor, factor);
+
+
                         // Draw the rectangle and outline
-                        Raylib.DrawRectangle(screenX, screenY, Size, Size, ShapeColor);
-                        Raylib.DrawRectangleLines(screenX, screenY, Size, Size, Color.Black);
+                        Raylib.DrawRectangle(screenX, screenY, Size, Size, interpolatedColor);
+                        Color outlineColor = new Color(
+                                                 Math.Max(interpolatedColor.R - 100, 0),
+                                                 Math.Max(interpolatedColor.G - 100, 0),
+                                                 Math.Max(interpolatedColor.B - 100, 0),
+                                                 200); // Semi-transparent
+                        Raylib.DrawRectangleLinesEx(new Rectangle(screenX, screenY, Size, Size), 2, outlineColor);
                     }
                 }
             }
         }
+
         public void DrawPreview(int posX, int posY)
         {
-            // Offset for preview display
-            int offsetX = posX;
-            int offsetY = posY;
 
-            // Clone the Shape array to avoid modifying the original Shape of the piece
-            int[,] previewShape = (int[,])Shape.Clone();
+            // Calculate the effective X and Y positions within the play area
+            int effectiveX = X - 20;
+            int effectiveY = Y - 40;
 
-            // Loop through the previewShape matrix to draw the preview
-            for (int i = 0; i < previewShape.GetLength(0); i++)
+            Color startColor = new Color(
+                Math.Min(ShapeColor.R + 50, 255),
+                Math.Min(ShapeColor.G + 50, 255),
+                Math.Min(ShapeColor.B + 50, 255),
+                ShapeColor.A);
+
+            for (int i = 0; i < Shape.GetLength(0); i++)
             {
-                for (int j = 0; j < previewShape.GetLength(1); j++)
+                for (int j = 0; j < Shape.GetLength(1); j++)
                 {
-                    if (previewShape[i, j] == 1)
+                    if (Shape[i, j] == 1)
                     {
-                        // Calculate the screen position where this cell should be drawn for preview
-                        int screenX = offsetX + j * Size;
-                        int screenY = offsetY + i * Size;
+                        // Calculate the screen position where this cell should be drawn
+                        int screenX = posX + (effectiveX / Size + j) * Size;
+                        int screenY = posY + (effectiveY / Size + i) * Size;
 
-                        // Draw the rectangle and outline for preview
-                        Raylib.DrawRectangle(screenX, screenY, Size, Size, ShapeColor);
-                        Raylib.DrawRectangleLines(screenX, screenY, Size, Size, Color.Black);
+                        // Interpolate the color for the gradient effect
+                        float factor = (float)i / Shape.GetLength(0);
+                        Color interpolatedColor = InterpolateColor(startColor, ShapeColor, factor);
+
+
+                        // Draw the rectangle and outline
+                        Raylib.DrawRectangle(screenX, screenY, Size, Size, interpolatedColor);
+                        Color outlineColor = new Color(
+                                                 Math.Max(interpolatedColor.R - 100, 0),
+                                                 Math.Max(interpolatedColor.G - 100, 0),
+                                                 Math.Max(interpolatedColor.B - 100, 0),
+                                                 200); // Semi-transparent
+                        Raylib.DrawRectangleLinesEx(new Rectangle(screenX, screenY, Size, Size), 2, outlineColor);
                     }
                 }
             }
         }
-
-
 
         public void Rotate()
         {
@@ -98,6 +140,38 @@ namespace Tetris.src.Tetris
             Shape = newShape;
         }
 
+        public Color InterpolateColor(Color startColor, Color endColor, float factor)
+        {
+            int r = (int)(startColor.R + factor * (endColor.R - startColor.R));
+            int g = (int)(startColor.G + factor * (endColor.G - startColor.G));
+            int b = (int)(startColor.B + factor * (endColor.B - startColor.B));
+            int a = (int)(startColor.A + factor * (endColor.A - startColor.A));
+
+            return new Color(r, g, b, a);
+        }
+        public Color GetBlockColor(int col, int row)
+        {
+
+
+            // Vérifier les limites de Shape
+            if (col < 0 || col >= Shape.GetLength(1) || row < 0 || row >= Shape.GetLength(0))
+            {
+                // Gérer l'erreur ici, par exemple en renvoyant une couleur par défaut
+                return Color.Gray; // Ou une autre couleur par défaut de votre choix
+            }
+
+            // Accès à Shape en utilisant les indices col et row
+            if (Shape[row, col] == 1)
+            {
+                // Renvoyer la couleur correspondante du bloc
+                return ShapeColor;
+            }
+            else
+            {
+                // Gérer le cas où Shape[row, col] != 1 si nécessaire
+                return Color.Gray;
+            }
+        }
 
 
 

@@ -16,6 +16,7 @@ class Program
         Piece[] pieces = new Piece[]
         {
             new Piece(Shapes.LShape, Color.Orange, 30, GlobalSettings.PlayAreaWidth, GlobalSettings.PlayAreaHeight),
+            new Piece(Shapes.JShape, Color.Blue, 30, GlobalSettings.PlayAreaWidth, GlobalSettings.PlayAreaHeight),
             new Piece(Shapes.TShape, Color.Purple, 30, GlobalSettings.PlayAreaWidth, GlobalSettings.PlayAreaHeight),
             new Piece(Shapes.ZShape, Color.Red, 30, GlobalSettings.PlayAreaWidth, GlobalSettings.PlayAreaHeight),
             new Piece(Shapes.SShape, Color.Green, 30, GlobalSettings.PlayAreaWidth, GlobalSettings.PlayAreaHeight),
@@ -26,6 +27,7 @@ class Program
         Piece[] piecesNext = new Piece[]
         {
             new Piece(Shapes.LShape, Color.Orange, 30, GlobalSettings.PlayAreaWidth, GlobalSettings.PlayAreaHeight),
+            new Piece(Shapes.JShape, Color.Blue, 30, GlobalSettings.PlayAreaWidth, GlobalSettings.PlayAreaHeight),
             new Piece(Shapes.TShape, Color.Purple, 30, GlobalSettings.PlayAreaWidth, GlobalSettings.PlayAreaHeight),
             new Piece(Shapes.ZShape, Color.Red, 30, GlobalSettings.PlayAreaWidth, GlobalSettings.PlayAreaHeight),
             new Piece(Shapes.SShape, Color.Green, 30, GlobalSettings.PlayAreaWidth, GlobalSettings.PlayAreaHeight),
@@ -52,8 +54,8 @@ class Program
 
 
 
+        bool paused = false;
 
-     
 
 
         Raylib.InitAudioDevice();
@@ -110,7 +112,7 @@ class Program
         bool showTetrisMessage = false;
         int tetrisMessageCounter = 0;
 
-        List<Player> players = new List<Player>();
+        List<Player> players = Scoreboard.LoadScoresFromFile();
 
         if (!File.Exists(mainTheme))
         {
@@ -447,7 +449,10 @@ class Program
                         lineThickness,
                         Color.Pink
                     );
+                    Color pieceColor = pieces[selectedPieceIndex].ShapeColor;
 
+
+                    // Inside the main drawing loop where you draw the game grid
                     for (int row = 0; row < 20; row++)
                     {
                         for (int col = 0; col < 10; col++)
@@ -457,11 +462,19 @@ class Program
                                 int posX = GlobalSettings.PlayAreaX + col * gridSize;
                                 int posY = GlobalSettings.PlayAreaY + row * gridSize;
 
-                                Raylib.DrawRectangle(posX, posY, gridSize, gridSize, Color.Gray);
+                                // Utilisez GetBlockColor avec les indices corrects
+                                Color blockColor = pieces[selectedPieceIndex].GetBlockColor(col, row);
+                           
+                                // Dessine le bloc avec la couleur récupérée
+                                Raylib.DrawRectangle(posX, posY, gridSize, gridSize, blockColor);
+
+                                // Dessine les contours du bloc
                                 Raylib.DrawRectangleLines(posX, posY, gridSize, gridSize, Color.Black);
                             }
                         }
                     }
+
+
 
 
 
@@ -479,8 +492,23 @@ class Program
                     }
 
 
+                    if (Raylib.IsKeyPressed(KeyboardKey.P))
+                    {
+                        paused = !paused;  // Toggle pause state on 'P' key press
+                    }
 
-   
+                    if (!paused)
+                    {
+                        // Game logic when not paused (existing game logic)
+
+                        // Drawing code when not paused (existing drawing code)
+                    }
+                    else
+                    {
+                        // If paused, display a message or handle pausing UI
+                        Raylib.DrawText("Paused", 350, 300, 40, Color.Red);
+                    }
+
 
 
                     Raylib.DrawRectangle(390, 10, 320, 300, transparentWhite);  // Rectangle blanc autour du texte
@@ -527,6 +555,14 @@ class Program
             Raylib.CloseAudioDevice();
             Raylib.CloseWindow();
         }
+
+
+
+        if (Raylib.WindowShouldClose() && players.Count != 0)
+        {
+            Scoreboard.SaveScoresToFile(players);
+        }
+
     }
 
 }
