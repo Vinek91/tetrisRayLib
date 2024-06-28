@@ -1,5 +1,4 @@
-﻿
-namespace Tetris.src.Tetris
+﻿namespace Tetris.src.Tetris
 {
     public static class GlobalSettings
     {
@@ -36,7 +35,6 @@ namespace Tetris.src.Tetris
                 Grid[c, 0] = 0;
             }
         }
-
         public static bool IsPieceOutOfBounds(Piece piece)
         {
             if (piece == null || piece.Shape == null)
@@ -44,12 +42,13 @@ namespace Tetris.src.Tetris
                 throw new ArgumentNullException("piece", "Piece or Piece.Shape is null.");
             }
 
-            int N = piece.Shape.GetLength(0);
+            int rows = piece.Shape.GetLength(0);
+            int cols = piece.Shape.GetLength(1);
             int cellSize = piece.Size;
 
-            for (int i = 0; i < N; i++)
+            for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j < N; j++)
+                for (int j = 0; j < cols; j++)
                 {
                     if (piece.Shape[i, j] == 1)
                     {
@@ -57,7 +56,12 @@ namespace Tetris.src.Tetris
                         int gridY = (piece.Y - PlayAreaY) / cellSize + i;
 
                         // Check if the piece is out of bounds
-                        if (gridX < 0 || gridX >= 10 || gridY >= 20 || gridY >= 0 && Grid[gridX, gridY] == 1)
+                        if (gridX < 0 || gridX >= 10 || gridY < 0 || gridY >= 20)
+                        {
+                            return true;
+                        }
+                        // Check if the piece collides with placed blocks
+                        if (gridY >= 0 && Grid[gridX, gridY] == 1)
                         {
                             return true;
                         }

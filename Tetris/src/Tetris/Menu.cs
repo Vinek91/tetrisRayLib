@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Raylib_cs;
+﻿using Raylib_cs;
 
 namespace Tetris.src
 {

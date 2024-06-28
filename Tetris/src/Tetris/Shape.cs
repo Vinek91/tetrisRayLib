@@ -47,6 +47,8 @@
             { 0, 0, 0, 0 }
         };
 
+
+
         public static int[,] SquareShape = new int[,]
         {
             { 1, 1 },
